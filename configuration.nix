@@ -2,12 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      #./steam-configuration.nix # this didn't work
     ];
 
   # Bootloader.
@@ -49,6 +50,12 @@
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
+  # Configure keymap in X11
+  services.xserver = {
+    layout = "us";
+    xkbVariant = "";
+  };
+
   # configuration for dual monitors
   services.xserver.videoDrivers = [ "nvidia" ];
   services.xserver.displayManager.setupCommands = ''
@@ -63,21 +70,15 @@
           package =  config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
-  };
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
-    enable = false;
+    enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
@@ -95,8 +96,8 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.chris = {
     isNormalUser = true;
-    description = "Chris";
-    extraGroups = [ "networkmanager" "wheel" "openrazer" "plugdev" "audio" ];
+    description = "Chris McCullough";
+    extraGroups = [ "networkmanager" "wheel" "openrazer" "plugdev" "audio"];
     packages = with pkgs; [
       firefox
       kate
@@ -117,36 +118,28 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
-    obsidian
     brave
+    pkgs.discord
     git
-    python3
+    obsidian
 
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
 
-    pinentry-gtk2 # for gpg
+    vlc
+    libvlc
+    wineWowPackages.stable
   ];
 
   nixpkgs.config.permittedInsecurePackages = [
     "electron-25.9.0" # necessary for obsidian
   ];
 
-  # for spotify device access on same network
-  #networking.firewall.allowedTCPPorts = [ 57621 ];
-  #networking.firewall.allowedUDPPorts = [ 5353 ];
+  # steam configuration
+  programs.steam.enable = true;
 
-  # setup support for razer headphones
-  hardware.openrazer.enable = true;
-  hardware.openrazer.users = ["chris"];
-
-  # gnupg configuration
-  services.pcscd.enable = true;
-  programs.gnupg.agent = {
-        enable = true;
-        pinentryFlavor = "gtk2";
-        enableSSHSupport = true;
-  };
+  # discord configuration
+  nixpkgs.overlays = [(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; });})];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -174,4 +167,5 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
+
 }
