@@ -126,6 +126,7 @@
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
 
+    pinentry
     vlc
     libvlc
     wineWowPackages.stable
@@ -134,6 +135,9 @@
   nixpkgs.config.permittedInsecurePackages = [
     "electron-25.9.0" # necessary for obsidian
   ];
+
+  # pinentry configuration for gpg
+  programs.gnupg.agent.enable = true;
 
   # steam configuration
   programs.steam.enable = true;
