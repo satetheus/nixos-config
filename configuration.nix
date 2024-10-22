@@ -127,8 +127,11 @@
     polychromatic # for openrazer headphones
 
     pinentry
+    spotify
+    spotifyd
     vlc
     libvlc
+    wezterm
     wineWowPackages.stable
   ];
 
@@ -144,6 +147,10 @@
 
   # discord configuration
   nixpkgs.overlays = [(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; });})];
+
+  # spotify port allowance
+  networking.firewall.allowedTCPPorts = [ 57621 ]; 
+  networking.firewall.allowedUDPPorts = [ 5353 ]; 
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
