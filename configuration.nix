@@ -126,6 +126,22 @@
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
 
+    python310
+    libssh2
+    glibc
+    steam-run
+    (prismlauncher.override {
+    	jdks = [
+		graalvm-ce
+		zulu8
+		zulu17
+		zulu
+		pkgs.jdk21
+		pkgs.jdk17
+		pkgs.jdk8
+	];
+    })
+
     pinentry
     spotify
     spotifyd
@@ -133,6 +149,7 @@
     libvlc
     wezterm
     wineWowPackages.stable
+    winetricks
   ];
 
   nixpkgs.config.permittedInsecurePackages = [
@@ -143,7 +160,13 @@
   programs.gnupg.agent.enable = true;
 
   # steam configuration
-  programs.steam.enable = true;
+  #programs.steam.enable = true;
+  programs.steam = {
+  	enable = true;
+	remotePlay.openFirewall = true;
+	dedicatedServer.openFirewall = true;
+	#localNetworkGameTransfers.openFirewall = true;
+  };
 
   # discord configuration
   nixpkgs.overlays = [(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; });})];
@@ -151,6 +174,8 @@
   # spotify port allowance
   networking.firewall.allowedTCPPorts = [ 57621 ]; 
   networking.firewall.allowedUDPPorts = [ 5353 ]; 
+
+  services.ollama.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
