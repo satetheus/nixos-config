@@ -13,6 +13,7 @@
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -47,25 +48,28 @@
   services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    xkb.layout = "us";
+    xkb.variant = "";
   };
 
   # configuration for dual monitors
   services.xserver.videoDrivers = [ "nvidia" ];
   services.xserver.displayManager.setupCommands = ''
-        LEFT='HDMI-2'
-        RIGHT='DP-2'
+        LEFT='HDMI-0'
+        RIGHT='DP-3'
         ${pkgs.xorg.xrandr}/bin/xrandr --output $RIGHT --mode 1920x1080 --preferred --output $LEFT --mode 1920x1080 --left-of $RIGHT
   '';
   
   hardware.nvidia = {
           modesetting.enable = true;
+	  powerManagement.enable = false;
+	  powerManagement.finegrained = false;
+	  open = true;
           nvidiaSettings = true;
           package =  config.boot.kernelPackages.nvidiaPackages.stable;
   };
@@ -74,7 +78,6 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -119,12 +122,15 @@
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
     brave
-    pkgs.discord
+    pkgs.discord-ptb
     git
+    gh
     obsidian
 
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
+
+    musescore
 
     python310
     libssh2
@@ -142,6 +148,7 @@
 	];
     })
 
+    cudaPackages.cudatoolkit
     pinentry
     spotify
     spotifyd
@@ -175,7 +182,10 @@
   networking.firewall.allowedTCPPorts = [ 57621 ]; 
   networking.firewall.allowedUDPPorts = [ 5353 ]; 
 
-  services.ollama.enable = true;
+  services.ollama = {
+  	enable = true;
+	acceleration = "cuda";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
