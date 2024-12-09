@@ -124,6 +124,7 @@
     brave
     pkgs.discord-ptb
     git
+    gh
     obsidian
 
     openrazer-daemon # for openrazer headphones
