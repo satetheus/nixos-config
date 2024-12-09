@@ -73,11 +73,6 @@
           package =  config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  hardware.graphics = {
-    extraPackages = with pkgs; [mangohud];
-    extraPackages32 = with pkgs; [mangohud];
-  };
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
