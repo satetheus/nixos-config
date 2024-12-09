@@ -144,6 +144,7 @@
 	];
     })
 
+    cudaPackages.cudatoolkit
     pinentry
     spotify
     spotifyd
@@ -177,7 +178,10 @@
   networking.firewall.allowedTCPPorts = [ 57621 ]; 
   networking.firewall.allowedUDPPorts = [ 5353 ]; 
 
-  services.ollama.enable = true;
+  services.ollama = {
+  	enable = true;
+	acceleration = "cuda";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
