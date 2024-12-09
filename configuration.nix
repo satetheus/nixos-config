@@ -126,6 +126,7 @@
     git
     gh
     obsidian
+    fzf
 
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
