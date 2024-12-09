@@ -129,6 +129,8 @@
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
 
+    musescore
+
     python310
     libssh2
     glibc
