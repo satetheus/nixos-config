@@ -128,7 +128,9 @@
     git
     gh
     obsidian
+    obs-studio
     fzf
+    pkgs.home-manager
 
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
