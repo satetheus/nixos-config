@@ -67,9 +67,9 @@
   
   hardware.nvidia = {
           modesetting.enable = true;
-	  powerManagement.enable = false;
-	  powerManagement.finegrained = false;
-	  open = true;
+          powerManagement.enable = false;
+          powerManagement.finegrained = false;
+          open = true;
           nvidiaSettings = true;
           #package =  config.boot.kernelPackages.nvidiaPackages.stable;
           package =  config.boot.kernelPackages.nvidiaPackages.beta;
@@ -143,15 +143,15 @@
     glibc
     steam-run
     (prismlauncher.override {
-    	jdks = [
-		graalvm-ce
-		zulu8
-		zulu17
-		zulu
-		pkgs.jdk21
-		pkgs.jdk17
-		pkgs.jdk8
-	];
+        jdks = [
+            graalvm-ce
+            zulu8
+            zulu17
+            zulu
+            pkgs.jdk21
+            pkgs.jdk17
+            pkgs.jdk8
+    ];
     })
 
     cudaPackages.cudatoolkit
@@ -170,15 +170,18 @@
   ];
 
   # pinentry configuration for gpg
-  programs.gnupg.agent.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # steam configuration
   #programs.steam.enable = true;
   programs.steam = {
-  	enable = true;
-	remotePlay.openFirewall = true;
-	dedicatedServer.openFirewall = true;
-	#localNetworkGameTransfers.openFirewall = true;
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    #localNetworkGameTransfers.openFirewall = true;
   };
 
   # discord configuration
@@ -189,8 +192,8 @@
   networking.firewall.allowedUDPPorts = [ 5353 ]; 
 
   services.ollama = {
-  	enable = true;
-	acceleration = "cuda";
+      enable = true;
+      acceleration = "cuda";
   };
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -205,12 +208,6 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
