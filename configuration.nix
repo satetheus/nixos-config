@@ -132,9 +132,15 @@
     obs-studio
     fzf
     pkgs.home-manager
+    ripgrep
+
+    hyprlock
+    wl-clipboard # for neovim copy/paste
 
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
+
+    wofi
 
     musescore
 
@@ -161,6 +167,7 @@
     vlc
     libvlc
     wezterm
+    kitty
     wineWowPackages.stable
     winetricks
   ];
