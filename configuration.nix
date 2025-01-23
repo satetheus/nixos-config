@@ -59,12 +59,12 @@
 
   # configuration for dual monitors
   services.xserver.videoDrivers = [ "nvidia" ];
-  services.xserver.displayManager.setupCommands = ''
-        LEFT='HDMI-0'
-        RIGHT='DP-3'
-        ${pkgs.xorg.xrandr}/bin/xrandr --output $RIGHT --mode 1920x1080 --preferred --output $LEFT --mode 1920x1080 --left-of $RIGHT
-  '';
-  
+  #services.xserver.displayManager.setupCommands = ''
+        #LEFT='HDMI-0'
+        #RIGHT='DP-3'
+        #${pkgs.xorg.xrandr}/bin/xrandr --output $RIGHT --mode 1920x1080 --preferred --output $LEFT --mode 1920x1080 --left-of $RIGHT
+  #'';
+
   hardware.nvidia = {
           modesetting.enable = true;
           powerManagement.enable = false;
@@ -168,6 +168,13 @@
   nixpkgs.config.permittedInsecurePackages = [
     "electron-25.9.0" # necessary for obsidian
   ];
+
+  services.hypridle.enable = true;
+  security.pam.services.hyprlock = {};
+
+  programs.hyprland = {
+      enable = true;
+  };
 
   # pinentry configuration for gpg
   programs.gnupg.agent = {
