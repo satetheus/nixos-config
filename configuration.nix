@@ -210,6 +210,16 @@
       acceleration = "cuda";
   };
 
+  # automatic updates
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.dates = "monthly";
+
+  # automatic garbage collection
+  nix.gc.automatic = true;
+  nix.gc.dates = "weekly";
+  nix.gc.options = "--delete-older-than 35d";
+  nix.settings.auto-optimise-store = true;
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
