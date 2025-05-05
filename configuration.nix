@@ -131,6 +131,7 @@
     obsidian
     obs-studio
     fzf
+    fd
     pkgs.home-manager
     ripgrep
 
@@ -170,6 +171,7 @@
     kitty
     wineWowPackages.stable
     winetricks
+    zellij
   ];
 
   nixpkgs.config.permittedInsecurePackages = [
