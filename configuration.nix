@@ -5,11 +5,10 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
+  nix.extraOptions = "experimental-features = nix-command flakes";
+  imports = [
       ./hardware-configuration.nix
-      #./steam-configuration.nix # this didn't work
-    ];
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
