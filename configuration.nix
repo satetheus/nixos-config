@@ -143,6 +143,7 @@
     spotifyd
     vlc
     libvlc
+    universal-ctags
     wezterm
     kitty
     wineWowPackages.stable
