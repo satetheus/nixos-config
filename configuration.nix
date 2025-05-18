@@ -142,6 +142,7 @@
     eslint
     shellcheck
     cargo
+    lua
 
     cudaPackages.cudatoolkit
     pinentry
