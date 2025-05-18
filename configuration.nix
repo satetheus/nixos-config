@@ -137,6 +137,12 @@
     ];
     })
 
+    # linting tools
+    pylint
+    eslint
+    shellcheck
+    cargo
+
     cudaPackages.cudatoolkit
     pinentry
     spotify
