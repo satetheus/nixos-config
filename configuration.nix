@@ -41,8 +41,8 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
+  # this is necessary for usable mouse cursor & dolphin file manager
   services.xserver.desktopManager.plasma5.enable = true;
 
   # Configure keymap in X11
@@ -53,6 +53,11 @@
 
   # configuration for dual monitors
   services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.displayManager.setupCommands = ''
+          LEFT='HDMI-A-1'
+          RIGHT='DP-2'
+          ${pkgs.xorg.xrandr}/bin/xrandr --output $RIGHT --mode 1920x1080 --preferred --output $LEFT --mode 1920x1080 --left-of $RIGHT
+  '';
 
   hardware.nvidia = {
           modesetting.enable = true;
@@ -211,7 +216,7 @@
   services.samba = {
         package = pkgs.samba4Full;
         # ^^ `samba4Full` is compiled with avahi, ldap, AD etc support (compared to the default package, `samba`
-        # Required for samba to register mDNS records for auto discovery 
+        # Required for samba to register mDNS records for auto discovery
         # See https://github.com/NixOS/nixpkgs/blob/592047fc9e4f7b74a4dc85d1b9f5243dfe4899e3/pkgs/top-level/all-packages.nix#L27268
         enable = true;
         openFirewall = true;
