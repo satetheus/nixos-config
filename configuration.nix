@@ -5,11 +5,10 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
+  nix.extraOptions = "experimental-features = nix-command flakes";
+  imports = [
       ./hardware-configuration.nix
-      #./steam-configuration.nix # this didn't work
-    ];
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -17,11 +16,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -47,8 +41,8 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
+  # this is necessary for usable mouse cursor & dolphin file manager
   services.xserver.desktopManager.plasma5.enable = true;
 
   # Configure keymap in X11
@@ -59,19 +53,18 @@
 
   # configuration for dual monitors
   services.xserver.videoDrivers = [ "nvidia" ];
-  #services.xserver.displayManager.setupCommands = ''
-        #LEFT='HDMI-0'
-        #RIGHT='DP-3'
-        #${pkgs.xorg.xrandr}/bin/xrandr --output $RIGHT --mode 1920x1080 --preferred --output $LEFT --mode 1920x1080 --left-of $RIGHT
-  #'';
+  services.xserver.displayManager.setupCommands = ''
+          LEFT='HDMI-A-1'
+          RIGHT='DP-2'
+          ${pkgs.xorg.xrandr}/bin/xrandr --output $RIGHT --mode 1920x1080 --preferred --output $LEFT --mode 1920x1080 --left-of $RIGHT
+  '';
 
   hardware.nvidia = {
           modesetting.enable = true;
-          powerManagement.enable = false;
+          powerManagement.enable = true;
           powerManagement.finegrained = false;
           open = true;
           nvidiaSettings = true;
-          #package =  config.boot.kernelPackages.nvidiaPackages.stable;
           package =  config.boot.kernelPackages.nvidiaPackages.beta;
   };
 
@@ -86,16 +79,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.chris = {
@@ -104,8 +88,6 @@
     extraGroups = [ "networkmanager" "wheel" "openrazer" "plugdev" "audio"];
     packages = with pkgs; [
       firefox
-      kate
-    #  thunderbird
     ];
   };
 
@@ -122,8 +104,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
     brave
     pkgs.discord-ptb
     git
@@ -140,6 +120,8 @@
 
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
+
+    open-webui
 
     wofi
 
@@ -161,12 +143,21 @@
     ];
     })
 
+    # linting tools
+    pylint
+    eslint
+    shellcheck
+    cargo
+    lua
+    uv
+
     cudaPackages.cudatoolkit
     pinentry
     spotify
     spotifyd
     vlc
     libvlc
+    universal-ctags
     wezterm
     kitty
     wineWowPackages.stable
@@ -192,24 +183,38 @@
   };
 
   # steam configuration
-  #programs.steam.enable = true;
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
-    #localNetworkGameTransfers.openFirewall = true;
   };
 
   # discord configuration
   nixpkgs.overlays = [(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; });})];
 
   # spotify port allowance
-  networking.firewall.allowedTCPPorts = [ 137 138 139 445 57621 ]; 
-  networking.firewall.allowedUDPPorts = [ 5353 ]; 
+  networking.firewall.allowedTCPPorts = [ 137 138 139 445 8080 57621 ];
+  networking.firewall.allowedUDPPorts = [ 5353 ];
 
   services.ollama = {
       enable = true;
       acceleration = "cuda";
+      openFirewall = true;
+  };
+
+  services.open-webui = {
+    package = pkgs.open-webui;
+    enable = true;
+    openFirewall = true;
+    host = "0.0.0.0";
+    port = 8080;
+    environment = {
+        ANONYMIZED_TELEMETRY = "False";
+        DO_NOT_TRACK = "True";
+        SCARF_NO_ANALYTICS = "True";
+        OLLAMA_API_BASE_URL = "http://127.0.0.1:11434/api";
+        OLLAMA_BASE_URL = "http://127.0.0.1:11434";
+    };
   };
 
   # automatic updates
@@ -229,7 +234,7 @@
   services.samba = {
         package = pkgs.samba4Full;
         # ^^ `samba4Full` is compiled with avahi, ldap, AD etc support (compared to the default package, `samba`
-        # Required for samba to register mDNS records for auto discovery 
+        # Required for samba to register mDNS records for auto discovery
         # See https://github.com/NixOS/nixpkgs/blob/592047fc9e4f7b74a4dc85d1b9f5243dfe4899e3/pkgs/top-level/all-packages.nix#L27268
         enable = true;
         openFirewall = true;
@@ -254,16 +259,6 @@
 
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
