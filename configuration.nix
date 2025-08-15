@@ -122,6 +122,8 @@
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
 
+    open-webui
+
     wofi
 
     musescore
@@ -191,12 +193,28 @@
   nixpkgs.overlays = [(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; });})];
 
   # spotify port allowance
-  networking.firewall.allowedTCPPorts = [ 137 138 139 445 57621 ]; 
-  networking.firewall.allowedUDPPorts = [ 5353 ]; 
+  networking.firewall.allowedTCPPorts = [ 137 138 139 445 8080 57621 ];
+  networking.firewall.allowedUDPPorts = [ 5353 ];
 
   services.ollama = {
       enable = true;
       acceleration = "cuda";
+      openFirewall = true;
+  };
+
+  services.open-webui = {
+    package = pkgs.open-webui;
+    enable = true;
+    openFirewall = true;
+    host = "0.0.0.0";
+    port = 8080;
+    environment = {
+        ANONYMIZED_TELEMETRY = "False";
+        DO_NOT_TRACK = "True";
+        SCARF_NO_ANALYTICS = "True";
+        OLLAMA_API_BASE_URL = "http://127.0.0.1:11434/api";
+        OLLAMA_BASE_URL = "http://127.0.0.1:11434";
+    };
   };
 
   # automatic updates
