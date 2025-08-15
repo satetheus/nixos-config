@@ -88,7 +88,6 @@
     extraGroups = [ "networkmanager" "wheel" "openrazer" "plugdev" "audio"];
     packages = with pkgs; [
       firefox
-      kate
     ];
   };
 
