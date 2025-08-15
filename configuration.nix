@@ -149,6 +149,7 @@
     shellcheck
     cargo
     lua
+    uv
 
     cudaPackages.cudatoolkit
     pinentry
