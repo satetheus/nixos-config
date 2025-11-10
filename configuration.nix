@@ -15,10 +15,12 @@
   boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # General Networking Settings
   networking.hostName = "nixos"; # Define your hostname.
-
-  # Enable networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+      enable = true;
+      ethernet.macAddress = "random";
+  };
 
   # Set your time zone.
   time.timeZone = "America/Denver";
