@@ -153,6 +153,7 @@
     lua
     uv
 
+    n8n
     cudaPackages.cudatoolkit
     pinentry
     spotify
