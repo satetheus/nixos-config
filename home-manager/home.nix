@@ -13,7 +13,6 @@
 
   home.packages = [
     pkgs.btop
-    pkgs.nodejs_22
   ];
 
   # required for hyprland
@@ -31,7 +30,10 @@
   programs = {
       bash = {
         enable = true;
+        profileExtra = "eval `keychain --nogui --eval --agents ssh gh`";
         bashrcExtra = ". ~/dotfiles/homedir/.bashrc";
+        historyFileSize = -1;
+        historySize = -1;
       };
 
       git = {

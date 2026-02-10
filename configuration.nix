@@ -19,7 +19,6 @@
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager = {
       enable = true;
-      ethernet.macAddress = "random";
   };
 
   # Set your time zone.
@@ -107,23 +106,22 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     brave
-    pkgs.discord-ptb
     git
     gh
     obsidian
     obs-studio
     fzf
     fd
+    starship
     pkgs.home-manager
     ripgrep
+    keychain
 
     hyprlock
     wl-clipboard # for neovim copy/paste
 
     openrazer-daemon # for openrazer headphones
     polychromatic # for openrazer headphones
-
-    open-webui
 
     wofi
 
@@ -153,11 +151,8 @@
     lua
     uv
 
-    n8n
     cudaPackages.cudatoolkit
     pinentry
-    spotify
-    spotifyd
     vlc
     libvlc
     universal-ctags
@@ -171,6 +166,16 @@
   nixpkgs.config.permittedInsecurePackages = [
     "electron-25.9.0" # necessary for obsidian
   ];
+
+  programs.direnv = {
+      enable = true;
+  };
+  # direnv prints a bunch of junk when this isn't set
+  environment.etc."direnv/direnv.toml".text = ''
+        [global]
+        hide_env_diff = true
+        log_format="-"
+  '';
 
   services.hypridle.enable = true;
   security.pam.services.hyprlock = {};
@@ -191,6 +196,13 @@
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
   };
+  hardware.steam-hardware.enable = true;
+
+  # appimage support for shadps4
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
 
   # discord configuration
   nixpkgs.overlays = [(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; });})];
@@ -198,27 +210,6 @@
   # spotify port allowance
   networking.firewall.allowedTCPPorts = [ 137 138 139 445 8080 57621 ];
   networking.firewall.allowedUDPPorts = [ 5353 ];
-
-  services.ollama = {
-      enable = true;
-      acceleration = "cuda";
-      openFirewall = true;
-  };
-
-  services.open-webui = {
-    package = pkgs.open-webui;
-    enable = true;
-    openFirewall = true;
-    host = "0.0.0.0";
-    port = 8080;
-    environment = {
-        ANONYMIZED_TELEMETRY = "False";
-        DO_NOT_TRACK = "True";
-        SCARF_NO_ANALYTICS = "True";
-        OLLAMA_API_BASE_URL = "http://127.0.0.1:11434/api";
-        OLLAMA_BASE_URL = "http://127.0.0.1:11434";
-    };
-  };
 
   # automatic updates
   system.autoUpgrade.enable = true;
@@ -242,7 +233,7 @@
         # See https://github.com/NixOS/nixpkgs/blob/592047fc9e4f7b74a4dc85d1b9f5243dfe4899e3/pkgs/top-level/all-packages.nix#L27268
         enable = true;
         openFirewall = true;
-        settings.testshare = {
+        shares.testshare = {
           path = "/mnt/Shares/Public";
           writable = "true";
           comment = "Hello World!";
