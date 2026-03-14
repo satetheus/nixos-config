@@ -49,12 +49,12 @@
 
       git = {
         enable = true;
-        userName = "satetheus";
-        userEmail = "personal@cwmccullough.com";
-        aliases = {
-            ctags = "!.git/hooks/ctags";
-        };
-        extraConfig = {
+        settings = {
+            user.name = "satetheus";
+            user.email = "personal@cwmccullough.com";
+            alias = {
+                ctags = "!.git/hooks/ctags";
+            };
             commit.gpgsign = true;
             tag.gpgsign = true;
             user.signingkey = "CA7F4107215BD7FD";
