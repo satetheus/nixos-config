@@ -24,6 +24,7 @@
     pkgs.zellij
     pkgs.gh
     pkgs.starship
+    pkgs.calibre
   ];
 
   # required for hyprland
