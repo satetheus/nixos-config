@@ -1,8 +1,11 @@
 { config, pkgs, ... }:
 
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
+  # this should not be required, but the is a long-standing bug (3+ years!)
+  # that causes the below line to be necessary in stand-alone flake configs
+  # for home-manager
+  nixpkgs.config.allowUnfreePredicate = (pkg: true);
+
   home.username = "chris";
   home.homeDirectory = "/home/chris";
 
@@ -13,6 +16,14 @@
 
   home.packages = [
     pkgs.btop
+    pkgs.obsidian
+    pkgs.obs-studio
+    pkgs.musescore
+    pkgs.steam-run
+    pkgs.vlc
+    pkgs.zellij
+    pkgs.gh
+    pkgs.starship
   ];
 
   # required for hyprland

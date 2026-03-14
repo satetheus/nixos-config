@@ -88,7 +88,6 @@
     description = "Chris McCullough";
     extraGroups = [ "networkmanager" "wheel" "openrazer" "plugdev" "audio"];
     packages = with pkgs; [
-      firefox
     ];
   };
 
@@ -107,12 +106,8 @@
   environment.systemPackages = with pkgs; [
     brave
     git
-    gh
-    obsidian
-    obs-studio
     fzf
     fd
-    starship
     pkgs.home-manager
     ripgrep
     keychain
@@ -124,13 +119,6 @@
     polychromatic # for openrazer headphones
 
     wofi
-
-    musescore
-
-    python310
-    libssh2
-    glibc
-    steam-run
     (prismlauncher.override {
         jdks = [
             graalvm-ce
@@ -142,8 +130,11 @@
             pkgs.jdk8
     ];
     })
+    python310
+    libssh2
+    glibc
 
-    # linting tools
+    # linting tools, consider adding this to dev flakes
     pylint
     eslint
     shellcheck
@@ -151,16 +142,10 @@
     lua
     uv
 
-    cudaPackages.cudatoolkit
     pinentry
-    vlc
-    libvlc
     universal-ctags
     wezterm
     kitty
-    wineWowPackages.stable
-    winetricks
-    zellij
   ];
 
   nixpkgs.config.permittedInsecurePackages = [
@@ -204,10 +189,7 @@
     binfmt = true;
   };
 
-  # discord configuration
-  nixpkgs.overlays = [(self: super: { discord = super.discord.overrideAttrs (_: { src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz; });})];
-
-  # spotify port allowance
+  # port allowances
   networking.firewall.allowedTCPPorts = [ 137 138 139 445 8080 57621 ];
   networking.firewall.allowedUDPPorts = [ 5353 ];
 
