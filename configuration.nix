@@ -104,6 +104,8 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    man-pages
+    man-pages-posix
     brave
     git
     fzf
@@ -151,6 +153,9 @@
   nixpkgs.config.permittedInsecurePackages = [
     "electron-25.9.0" # necessary for obsidian
   ];
+
+  # this allows man pages for libraries & utils
+  documentation.dev.enable = true;
 
   programs.direnv = {
       enable = true;
