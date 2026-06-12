@@ -154,6 +154,8 @@
 
   programs.direnv = {
       enable = true;
+      enableBashIntegration = true;
+      nix-direnv.enable = true;
   };
   # direnv prints a bunch of junk when this isn't set
   environment.etc."direnv/direnv.toml".text = ''
