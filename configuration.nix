@@ -114,6 +114,8 @@
     ripgrep
     keychain
 
+    protontricks
+
     hyprlock
     wl-clipboard # for neovim copy/paste
 
@@ -216,6 +218,8 @@
 
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
+
+  programs.nix-ld.enable = true;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
