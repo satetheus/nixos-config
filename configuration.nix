@@ -59,7 +59,7 @@
   services.xserver.displayManager.setupCommands = ''
           LEFT='HDMI-A-1'
           RIGHT='DP-2'
-          ${pkgs.xorg.xrandr}/bin/xrandr --output $RIGHT --mode 1920x1080 --preferred --output $LEFT --mode 1920x1080 --left-of $RIGHT
+          ${pkgs.xrandr}/bin/xrandr --output $RIGHT --mode 1920x1080 --preferred --output $LEFT --mode 1920x1080 --left-of $RIGHT
   '';
 
   environment.sessionVariables = {
@@ -121,7 +121,7 @@
 
     (prismlauncher.override {
         jdks = [
-            graalvm-ce
+            graalvmPackages.graalvm-ce
             zulu8
             zulu17
             zulu
@@ -130,7 +130,7 @@
             pkgs.jdk8
     ];
     })
-    python310
+    python314
     libssh2
     glibc
 
