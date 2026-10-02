@@ -40,11 +40,13 @@
   };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  services = {
+    desktopManager.plasma6.enable = true;
+    displayManager.plasma-login-manager.enable = true;
+    xserver.enable = true;
+  };
 
   services.displayManager.sddm.enable = true;
-  # this is necessary for usable mouse cursor & dolphin file manager
-  services.xserver.desktopManager.plasma5.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -59,6 +61,13 @@
           RIGHT='DP-2'
           ${pkgs.xorg.xrandr}/bin/xrandr --output $RIGHT --mode 1920x1080 --preferred --output $LEFT --mode 1920x1080 --left-of $RIGHT
   '';
+
+  environment.sessionVariables = {
+        WLR_NO_HARDWARE_CURSORS = "1";
+        NIXOS_OZONE_WL = "1";
+  };
+
+  hardware.opengl.enable = true;
 
   hardware.nvidia = {
           modesetting.enable = true;
@@ -156,8 +165,11 @@
   services.hypridle.enable = true;
   security.pam.services.hyprlock = {};
 
+  services.getty.autologinUser = "chris";
+
   programs.hyprland = {
-      enable = true;
+        enable = true;
+        xwayland.enable = true;
   };
 
   # pinentry configuration for gpg
