@@ -25,6 +25,19 @@
     pkgs.gh
     pkgs.starship
     pkgs.calibre
+    pkgs.kdePackages.dolphin
+    pkgs.ripgrep
+    pkgs.protontricks
+    pkgs.wl-clipboard # for neovim copy/paste
+    pkgs.man-pages
+    pkgs.man-pages-posix
+    pkgs.fzf
+    pkgs.fd
+    pkgs.openrazer-daemon # for openrazer headphones
+    pkgs.polychromatic # for openrazer headphones
+    pkgs.universal-ctags
+    pkgs.keychain
+    pkgs.wofi
   ];
 
   # required for hyprland

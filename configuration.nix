@@ -104,25 +104,12 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    man-pages
-    man-pages-posix
     brave
     git
-    fzf
-    fd
     pkgs.home-manager
-    ripgrep
-    keychain
-
-    protontricks
 
     hyprlock
-    wl-clipboard # for neovim copy/paste
 
-    openrazer-daemon # for openrazer headphones
-    polychromatic # for openrazer headphones
-
-    wofi
     (prismlauncher.override {
         jdks = [
             graalvm-ce
@@ -139,16 +126,11 @@
     glibc
 
     # linting tools, consider adding this to dev flakes
-    pylint
-    eslint
-    shellcheck
     cargo
     lua
     uv
 
-    pinentry
-    universal-ctags
-    wezterm
+    pinentry-tty
     kitty
   ];
 
