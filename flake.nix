@@ -34,5 +34,12 @@
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix
       };
+
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        modules = [
+            ./configuration.nix
+            ./hardware-configuration.nix
+        ];
+      };
     };
 }
