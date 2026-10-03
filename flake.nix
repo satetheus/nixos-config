@@ -1,9 +1,11 @@
 {
-  description = "Home Manager configuration of chris";
+  description = "Flake-parts based config";
 
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
@@ -18,28 +20,14 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-      config = { allowUnfree = true; };
-    in {
-      homeConfigurations."chris" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
-        modules = [ ./home-manager/home.nix ];
-
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
-      };
-
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        modules = [
-            ./configuration.nix
-            ./hardware-configuration.nix
+  outputs = inputs @ { nixpkgs, home-manager, flake-parts, ... }:
+      flake-parts.lib.mkFlake { inherit inputs; }
+      {
+        systems = [ "x86_64-linux" ];
+        imports = [
+          ./nixos.nix
+          inputs.home-manager.flakeModules.home-manager
+          ./home-manager/home.nix
         ];
       };
-    };
 }
