@@ -1,14 +1,20 @@
-{ config, pkgs, ... }:
+{ self, inputs, ... }: {
+  flake.homeConfigurations."chris" = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
+        modules = [
+                self.homeModules.chris {
+          # this should not be required, but the is a long-standing bug (3+ years!)
+          # that causes the below line to be necessary in stand-alone flake configs
+          # for home-manager
+          nixpkgs.config.allowUnfreePredicate = (pkg: true);
 
-{
-  # this should not be required, but the is a long-standing bug (3+ years!)
-  # that causes the below line to be necessary in stand-alone flake configs
-  # for home-manager
-  nixpkgs.config.allowUnfreePredicate = (pkg: true);
+          home.username = "chris";
+          home.homeDirectory = "/home/chris";
+          }
+          ];
+  };
 
-  home.username = "chris";
-  home.homeDirectory = "/home/chris";
-
+  flake.homeModules.chris = { config, pkgs, ... }: {
   # You should not change this value, even if you update Home Manager. If you do
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
@@ -88,5 +94,7 @@
   home.sessionVariables = {
     EDITOR = "nvim";
   };
+
+};
 
 }
