@@ -44,6 +44,7 @@
     pkgs.universal-ctags
     pkgs.keychain
     pkgs.wofi
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # required for hyprland
